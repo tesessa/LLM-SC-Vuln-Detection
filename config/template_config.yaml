@@ -1,0 +1,22 @@
+# ------------------------------------ USAGE -----------------------------------
+# The YAML configuration contains all necessary paths and parameters to easily 
+# collaborate code. It can include things such as model name/path (to easily switch
+# out models) or our own directory paths to the data needed to train a model
+# This makes it useful for multiple people to be able to easily integrate the same code
+#
+# To use a YAML config, create a copy of template_config.yaml in the
+# user_configs folder and fill in the necessary parameters. The contents in user_config files 
+# are not committed to the repo.
+#
+# Path names need to be specified properly and be absolute paths. A suggested
+# path structure is given in the template. The YAML config file is then passed
+# as an argument to any scripts.
+#
+# For example, to train a model, run the following in the repository root
+# directory:
+#        python3 train_model.py ./configs/user_configs/my_config.yaml
+#
+# Do not Add a YAML config to a git commit unless you have a good reason.
+
+model_name: ~
+output_path: ~
