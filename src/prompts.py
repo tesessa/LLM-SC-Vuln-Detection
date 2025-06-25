@@ -1,6 +1,4 @@
-# this is a file to store our different prompts that we try out, here is a quick example that can be updated
-
-
+# this is a file to store our different prompts that we try out
 CoT = """
 
 """
