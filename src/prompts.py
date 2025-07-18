@@ -18,22 +18,73 @@ Output:{{weakness_found: "", reasoning: ""}}
 """
 
 CoT = """
-You are a smart contract auditor whose purpose is to identify CWE weaknesses within smart contracts. You are to find only one CWE weakness at a time. Given the smart contract and a list of already found weaknesses find a new weakness that hasn't been found in the smart contract. Output it in json format like below:
+You are a smart contract auditor whose purpose is to identify CWE weaknesses within smart contracts. 
 
-Input:
-Smart Contract: "```\\nif  (vAssets.borrowAsset == FTM) {{ \\n    require(msg.value >= debtTotal, Errors.VL_AMOUNT_ERROR);\\n else {{\\n    //...\\n```"
-Weaknesses found: ["CWE-754"]
+You will follow a strict, step-by-step reasoning process before providing your final conclusion in a structured JSON format. 
+This is how your reasoning process should look like:
 
-Weakness found and reasoning:
-There is a weakness present where if a user provides more 'FTM' tokens than the required 'debtTotal' amount, the remaining tokens are not returned to the user. Since the contract is not upgradeable and this issue can't be fixed then the related CWE is CWE-1329.
-Output: {{"weakness_found": "CWE-1329", "reasoning": "The contract does not return excess FTM tokens to the user if they provide more than the required debtTotal amount, leading to a loss of funds for the user. This contract is not upgradeable, so this issue cannot be fixed leading to a weakness of relying on non upgradeable contracts, or CWE-1329 "Reliance on componenent that is not updateable"}}
+### THE REASONING PROCESS
+Step 1: First, let me carefully read and understand the smart contract code
+- What functions are present?
+- What are the critical functions and their visibility? (public, external, private, internal)?
+- What are the important state variables? Which ones track ownership, balances, or critical state?
+- How do the functions interact with each other? 
+- Are there any dependencies between them?
+- What does each function do?
 
+
+Step 2: Next, I'll analyze the control flow and data flow
+- How does data move through the contract?
+- How can an external actor (EOA or another contract) interact with this contract?
+- Are there any external calls or state changes?
+- Let me trace how user-controlled input (e.g., function arguments, msg.sender, msg.value) flows through the contract and affects state variables.
+- Where does the contract trust external inputs or external contract calls? Are these assumptions safe?
+- What are the entry and exit points?
+- Which functions modify critical state variables? Under what conditions?
+
+
+Step 3: Now I'll look for common vulnerability patterns...
+  For Access Control:
+  - [ ] CWE-269 (Improper Privilege Management): Can unauthorized users perform privileged actions? (e.g., missing onlyOwner modifiers)
+  - [ ] CWE-285 (Improper Authorization): Are tx.origin checks used for authorization?
+  - [ ] CWE-1270 (Generation of Incorrect Security Tokens): Can function selectors be manipulated or collided with?
+  For Reentrancy:
+  - [ ] CWE-841 (Improper Enforcement of Behavioral Workflow): Is there a potential for reentrancy attacks on functions that send ETH or call external contracts before updating state? (Checks-Effects-Interactions pattern).
+    For Arithmetic Issues:
+  - [ ] CWE-190 (Integer Overflow) / CWE-191 (Integer Underflow): Are there any arithmetic operations on integers that are not protected by a safe math library (for Solidity <0.8.0)?
+    For Input and Data Validation:
+  - [ ] CWE-20 (Improper Input Validation): Does the contract fail to validate inputs, especially addresses (e.g., checking for address(0)) or array lengths?
+  - [ ] CWE-754 (Unchecked Return Value): Are the return values of low-level calls like .call(), .send(), and .delegatecall() properly checked?
+  Gas-Related Issues:
+  - [ ] CWE-464 (Addition of Data to Data Structure): Is there unbounded looping or storage that could lead to a denial of service (gas limit exhaustion)?
+  - Logic and Business Rules:
+  - [ ] CWE-668 (Exposure of Resource to Wrong Sphere): Is sensitive information exposed (e.g., private keys, predictable "random" numbers)?
+  - [ ] CWE-840 (Business Logic Errors): Are there edge cases or unexpected states that break the contract's intended economic model or logic? (e.g., flash loan exploits, timestamp dependence).
+  
+  - Are there any unchecked arithmetic operations?
+  - Are there proper access controls?
+  - Are there any reentrancy risks?
+  - Are there any input validation issues?
+  - Are there any logic errors or edge cases?
+
+Step 4: I'll compare my findings from Step 3 against already identified weaknesses
+- What CWEs have already been found: {weaknesses}
+- Is there anything new I've identified that's not in this list?
+
+Step 5: Based on my comparative analysis, ff I found something new, I'll classify it properly
+- What specific CWE category does this fall under?
+- What's the exact location and nature of the weakness?
+- How could this weakness be exploited?
+- I will now output in the following format: Output: {{"weakness_found": "", "reasoning": ""}}
+
+### TASK
+Now, apply the reasoning process defined above to the following smart contract.
 
 Smart Contract: {code}
 Weaknesses found: {weaknesses}
 
-If there are no more weaknesses within the smart contract output {{weakness_found: null, reasoning: "no new weakness found"}}, make sure to only output the json string and nothing else.
-Output: {{weakness_found: "", reasoning: ""}}
+(Do your step-by-step thinking here internally, then provide only the final JSON output below)
+Output: {{"weakness_found": "", "reasoning": ""}}
 """
 
 n_shot = """
