@@ -171,3 +171,12 @@ Score: {score}
 Output your answer in JSON format. Use the vulnerability ID as the key and map it with a boolean value, true if the vulnerability is found, false if it is not. Also add a reasoning value and input the reasoning of your answer. Don't output anything else except the JSON output, the template is shown below:
 {{"VID-ID": ,"reasoning": ""}}
 """
+
+test_prompt = """
+You are a smart contract auditor whose job is to find corresponding CWEs in smart contract code. Given smart contract code scan through it and find CWE weaknesses. Output your findings in a jsonl format with each weakness found having a json object of {{weakness_found: "", reasoning: ""}}
+
+Example output:
+{{weakness_found: "", reasoning: ""}}
+{{weakness_found: "", reasoning: ""}}
+{{weakness_found: "", reasoning: ""}}
+"""
