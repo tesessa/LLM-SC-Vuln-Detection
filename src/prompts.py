@@ -179,8 +179,18 @@ Example output:
 {{weakness_found: "", reasoning: ""}}
 {{weakness_found: "", reasoning: ""}}
 {{weakness_found: "", reasoning: ""}}
+
+Input:
+Smart Contract code: 
+{code}
+
+Output:
 """
 
 test_prompt2 = """
 You are a smart contract auditory whose job is to find CWEs in smart contract code. Given smart contract code scan through it and find CWE weaknesses. return a list of CWEs with reasoning.
+
+Input:
+Smart contract code:
+{code}
 """
