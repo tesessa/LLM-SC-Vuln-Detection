@@ -156,3 +156,17 @@ Weaknesses found: {weaknesses}
 
 Output: {{weakness_found: "", reasoning: ""}}
 """
+
+
+vuln_prompt = """
+You are a smart contract auditor who will be given a smart contract along with a potentital vulnerability. Your job is to identify whether that vulnerability exists within the contract. 
+You will output your answer along with your reasoning in JSON format {{"VID-ID": ,"reasoning": ""}} and nothing else.
+
+Input:
+Smart Contract: {code}
+Vulnerability ID: {VID}
+Vulnerability: {vulnerability}
+
+Output your answer in JSON format with the VID ID as the key and if the vulnerability is found output true as the value, if it is not found output false. Also output a reasoning to go with your answer in JSON format, don't output anything else:
+{{"VID-ID": ,"reasoning": ""}}
+"""
