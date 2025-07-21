@@ -159,13 +159,14 @@ Output: {{weakness_found: "", reasoning: ""}}
 
 
 vuln_prompt = """
-You are a smart contract auditor who will be given a smart contract along with a potentital vulnerability and its ID. Your job is to identify whether that vulnerability exists within the contract. 
+You are a smart contract auditor who will be given a smart contract along with a potentital vulnerability and its ID. You will also be given a percentage score from previous agents. Previous agents found weakneses in the smart contract and the score will be based on the percentage of agents that found the weakness related to the potential vulnerability given. Your job is to identify whether that vulnerability exists within the contract. 
 You will output your answer along with reasoning of why the vulnerability does or does not exist within the contract. Explain where the vulnerability exists and how it could potentially be exploited.
 
 Input:
 Smart Contract: {code}
 Vulnerability ID: {VID}
 Vulnerability: {vulnerability}
+Score: {score}
 
 Output your answer in JSON format. Use the vulnerability ID as the key and map it with a boolean value, true if the vulnerability is found, false if it is not. Also add a reasoning value and input the reasoning of your answer. Don't output anything else except the JSON output, the template is shown below:
 {{"VID-ID": ,"reasoning": ""}}
